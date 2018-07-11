@@ -18,31 +18,38 @@ server.use(bodyParser.urlencoded({ extended: false }));
 server.post('/HD', (req, res) => {
 	//console.log(req.body, "It is running through");
 	//console.log(typeof req.body); //object but input is the value
+	try {
+		var parsedObj = JSON.parse(req.body.key) //turns string to object
+		//console.log(JSON.parse(req.body.key));
+	} catch(e) {
+		//console.log(e)
+		res.send('ERR: INVALID JSON');
+	}
 
-	var parsedObj = JSON.parse(req.body.key) //turns string to object
-	//console.log(JSON.parse(req.body.key));
-	var flattenData = []; 
-	var columnTitle = [];
-	var objValues = [];
+	let flattenData = []; 
+	let columnTitle = [];
 	for(var key in parsedObj){
-		columnTitle.push(key);
+		if(key !== 'children') columnTitle.push(key);
 	}
 	flattenData.push(columnTitle);
 
-	// var values = () => {
-	// 	for(var key in parsedObj){
-	// 	objValues.push(parsedObj[key]);
-	// 	}
-	// 	flattenData.push(objValues);
-	// }
+	let helpFunc = (node) => {
+		let stack = [];
+		for(let i = node.children.length -1; i >= 0; i--){
+			stack.push(node.children[i]);
+		}
+		var row = [];
+		for(var j = 0; j < columnTitle.length; j++){
+			row.push(node[columnTitle[j]]);
+		}	
+		flattenData.push(row);
+		while(stack.length !== 0){
+			helpFunc(stack.pop());
+		}
+	}
+	helpFunc(parsedObj);	
 
-	// if(parsedObj["children"]){
-	// 	for(var i = 0; i < parsedObj["children"].length; i++){
-	// 		values(parsedObj["children"][i]);
-	// 	}
-	// }
-
-	res.send('Successful!')
+	res.send(JSON.stringify(flattenData));
 })
 
 server.listen(3000, () => console.log('On port 3000 right meowww...'))
