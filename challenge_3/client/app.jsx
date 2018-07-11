@@ -1,9 +1,6 @@
-import React from 'react';
-import ReactDom from 'react-dom';
-
-class App extends React.Components {
-
-
-}
+const App = () => (
+	<h2>Rendering Correctly</h2>
+	
+);
 
 ReactDOM.render(<App />, document.getElementById('app'));
