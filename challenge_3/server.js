@@ -1,5 +1,6 @@
 const express = require('express')
 const server = express()
+const connection = require('./database/index.js');
 
 server.use(express.static('public'))
 
