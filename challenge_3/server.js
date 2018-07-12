@@ -1,6 +1,7 @@
 const express = require('express')
 const server = express()
 const connection = require('./database/index.js');
+const bodyParser = require('body-parser');
 
 server.use(express.static('public'))
 
@@ -10,9 +11,11 @@ server.use(function(req, res, next) {
   next();
 });
 
-server.post('/Main', function (req, res) {
-  
-  res.send('POST Working')
+server.use(bodyParser.text({type:"*/*"}))
+
+server.post('/', function (req, res) {
+	console.log(req.body, 'THIS THING')
+	res.send('Data Sent to Database')
 })
 
 server.listen(3000, () => console.log('3000 Ready To Go!'))
