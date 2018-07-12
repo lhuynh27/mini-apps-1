@@ -9,7 +9,6 @@ class App extends React.Component {
   }
   
   handleChange(e){
-    console.log(e.target.value);
     this.setState({
       [e.target.name] : e.target.value
     })
@@ -18,15 +17,21 @@ class App extends React.Component {
   clickNext(page){
     this.setState({
       page: page
+    });
+    fetch('http://127.0.0.1:3000/', {
+      method: 'POST',
+      body: JSON.stringify(this.state)
     })
+    .then(response => console.log(response))
+    .catch(err => console.log(err, 'Error Posting'));
   }
 
   displayPage(page){
-    if(this.state.page === 0) return <FirstPage clickNext={this.clickNext} />
-    if(this.state.page === 1) return <F1 clickNext={this.clickNext} />
-    if(this.state.page === 2) return <F2 clickNext={this.clickNext} />
-    if(this.state.page === 3) return <F3 clickNext={this.clickNext} />
-    if(this.state.page === 4) return <Confirmation clickNext={this.clickNext} />  
+    if(this.state.page === 0) return <FirstPage clickNext={this.clickNext} handleChange={this.handleChange} />
+    if(this.state.page === 1) return <F1 clickNext={this.clickNext} handleChange={this.handleChange} />
+    if(this.state.page === 2) return <F2 clickNext={this.clickNext} handleChange={this.handleChange} />
+    if(this.state.page === 3) return <F3 clickNext={this.clickNext} handleChange={this.handleChange} />
+    if(this.state.page === 4) return <Confirmation clickNext={this.clickNext} data={this.state} />  
   }
 
   render(){
@@ -45,7 +50,7 @@ const FirstPage = (props) => {
     <p>Cheese</p>
     <p>Wine</p>
     <p>Salami</p>
-    <button page={1} onClick={ () => {props.clickNext(1)}}>Checkout Now</button>
+    <button onClick={ () => {props.clickNext(1)}}>Checkout Now</button>
     </div>
   )
 };
@@ -57,7 +62,7 @@ const F1 = (props) => {
       <input type="text" placeholder="Name" size="30" name="name" onChange={props.handleChange} /><br></br>
       <input type="email" placeholder="Email Address" size="30" name="email" onChange={props.handleChange} /><br></br>
       <input type="password" placeholder="Password" size="30" name="password" onChange={props.handleChange} /><br></br> 
-      <button page={2} onClick={ () => {props.clickNext(2)}}>Create Account</button>
+      <button onClick={ () => {props.clickNext(2)}}>Create Account</button>
     </div>
   )
 };
@@ -72,7 +77,7 @@ const F2 = (props) => {
       <input type="text" placeholder="State" size="14" name="state" onChange={props.handleChange} />
       <input type="text" placeholder="Zip Code" size="14" name="shipZip" onChange={props.handleChange} /><br></br>
       <input type="text" placeholder="Phone Number" name="phoneNumber" onChange={props.handleChange} /><br></br>
-      <button page={3} onClick={ () => {props.clickNext(3)}}>Continue to Payment</button>
+      <button onClick={ () => {props.clickNext(3)}}>Continue to Payment</button>
     </div>
   )
 };
@@ -85,33 +90,33 @@ const F3 = (props) => {
       <input type="month" placeholder="Expiration Date" size="14" name="expDate" onChange={props.handleChange}/>
       <input type="text" placeholder="CVV" size="5" name="cvv" onChange={props.handleChange}/><br></br>
       <input type="text" placeholder="Billing Zip Code" name="billZip" onChange={props.handleChange}/><br></br>
-      <button page={4} onClick={ () => {props.clickNext(4)}}>Continue to Confirmation</button>
+      <button onClick={ () => {props.clickNext(4)}}>Continue to Confirmation</button>
     </div>
   ) 
 };
 
 const Confirmation = (props) => {
+  console.log(props.data);
   return (
     <div>
       <h3>Personal Information</h3>
-          <p>Name: {props.name}</p>
-          <p>Email: {props.email}</p>
-          <p>Address Line 1: {props.line1}</p>
-          <p>Address Line 1: {props.line2}</p>
-          <p>City: {props.city}</p>
-          <p>State: {props.state}</p>
-          <p>Zip Code: {props.shipZip}</p>
-          <p>Phone Number: {props.phoneNumber}</p>
-    <br></br><br></br>
+          <p>Name: {props.data.name}</p>
+          <p>Email: {props.data.email}</p>
+          <p>Address Line 1: {props.data.line1}</p>
+          <p>Address Line 1: {props.data.line2}</p>
+          <p>City: {props.data.city}</p>
+          <p>State: {props.data.state}</p>
+          <p>Zip Code: {props.data.shipZip}</p>
+          <p>Phone Number: {props.data.phoneNumber}</p>
       <h3>Credit Card Information</h3>
-          <p>Card Number: {props.cardNumber}</p>
-          <p>Expiration Date: {props.expDate}</p>
-          <p>CVV number: {props.cvv}</p>
-          <p>Billing Zip Code: {props.billZip}</p>
-    <br></br><br></br>
-    <button page={0} onClick={ () => {props.clickNext(0)}}>Purchase Now!</button>
+          <p>Card Number: {props.data.cardNumber}</p>
+          <p>Expiration Date: {props.data.expDate}</p>
+          <p>CVV number: {props.data.cvv}</p>
+          <p>Billing Zip Code: {props.data.billZip}</p>
+    <button onClick={ () => props.clickNext(0) }>Purchase Now!</button>
     </div>
   )
+
 };
 
 ReactDOM.render(<App />, document.getElementById('app'));
