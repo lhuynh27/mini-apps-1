@@ -25,12 +25,24 @@ class App extends React.Component {
     return(
       <div>
         <h1>Shopping Cart</h1>
+        <FirstPage />
+        <br></br><br></br>
         <F1 handleChange={this.handleChange} onClick={this.clickNext} /> 
         <F2 handleChange={this.handleChange} onClick={this.clickNext} />
         <F3 handleChange={this.handleChange} onClick={this.clickNext} />
+        <br></br><br></br>
+        <Confirmation />
       </div>
     )
   }
+};
+
+const FirstPage = (props) => {
+  return(
+    <div>
+    <button>Checkout Now</button>
+    </div>
+  )
 };
 
 const F1 = (props) => {
@@ -71,6 +83,14 @@ const F3 = (props) => {
       <button>Continue to Confirmation</button>
     </div>
   ) 
+};
+
+const Confirmation = (props) => {
+  return (
+    <div>
+    <button>Purchase Now</button>
+    </div>
+  )
 };
 
 ReactDOM.render(<App />, document.getElementById('app'));
