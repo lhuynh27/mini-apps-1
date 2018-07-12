@@ -20,7 +20,9 @@ CREATE TABLE f2 (
   state varchar(50) NOT NULL,
   shipzip varchar(20) NOT NULL,
   phonenumber varchar(20) NOT NULL,
-  PRIMARY KEY(id)
+  customer_id INTEGER NOT NULL,
+  PRIMARY KEY(id),
+  FOREIGN KEY(customer_id) REFERENCES f1(id)
 );
 
 CREATE TABLE f3 (
@@ -29,5 +31,7 @@ CREATE TABLE f3 (
   expirydate varchar(10) NOT NULL,
   cvv varchar(10) NOT NULL,
   billzip varchar(10) NOT NULL,
-  PRIMARY KEY(id)
+  customer_id INTEGER NOT NULL,
+  PRIMARY KEY(id),
+  FOREIGN KEY(customer_id) REFERENCES f1(id)
 );
