@@ -1,0 +1,12 @@
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+class App extends React.Components {
+  render(){
+    return(
+      <h1> I WORKKKKK *SQUID DANCE*</h1>
+    )
+  }
+};
+
+ReactDOM.render(<App />, document.getElementById('app'));
